@@ -1,0 +1,103 @@
+// This is your Prisma schema file (Prisma v7)
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  OFFICER
+  ADMIN
+}
+
+enum FineStatus {
+  PENDING
+  PAID
+  CANCELLED
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  officer   Officer?
+}
+
+model District {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  officers Officer[]
+}
+
+model Officer {
+  id         Int      @id @default(autoincrement())
+  userId     Int      @unique
+  badgeNo    String   @unique
+  phone      String
+  districtId Int
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id])
+  district   District @relation(fields: [districtId], references: [id])
+  fines      Fine[]
+}
+
+model FineCategory {
+  id          Int    @id @default(autoincrement())
+  name        String @unique
+  description String?
+  amount      Float
+  fines       Fine[]
+}
+
+model Fine {
+  id          Int        @id @default(autoincrement())
+  referenceNo String     @unique
+  vehicleNo   String
+  driverName  String
+  driverPhone String?
+  driverNIC   String?
+  offenseDate DateTime
+  location    String
+  categoryId  Int
+  officerId   Int
+  status      FineStatus @default(PENDING)
+  notes       String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  category    FineCategory @relation(fields: [categoryId], references: [id])
+  officer     Officer      @relation(fields: [officerId], references: [id])
+  payment     Payment?
+}
+
+model Payment {
+  id            Int      @id @default(autoincrement())
+  fineId        Int      @unique
+  amount        Float
+  payerName     String
+  payerPhone    String
+  paymentMethod String   @default("ONLINE")
+  transactionId String?  @unique
+  receiptNo     String   @unique
+  paidAt        DateTime @default(now())
+  fine          Fine     @relation(fields: [fineId], references: [id])
+  smsLogs       SMSLog[]
+}
+
+model SMSLog {
+  id        Int      @id @default(autoincrement())
+  paymentId Int
+  phone     String
+  message   String
+  status    String
+  sid       String?
+  sentAt    DateTime @default(now())
+  payment   Payment  @relation(fields: [paymentId], references: [id])
+}
