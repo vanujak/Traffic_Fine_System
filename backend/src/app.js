@@ -1,26 +1,30 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const morgan = require('morgan');
-const path = require('path');
-const fs = require('fs');
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const helmet = require("helmet");
+const morgan = require("morgan");
+const path = require("path");
+const fs = require("fs");
 
-const env = require('./config/env');
-const logger = require('./config/logger');
-const errorHandler = require('./middleware/errorHandler');
-const { generalLimiter } = require('./middleware/rateLimiter');
+const env = require("./config/env");
+const logger = require("./config/logger");
+const errorHandler = require("./middleware/errorHandler");
+const { generalLimiter } = require("./middleware/rateLimiter");
 
 // Route modules
-const authRoutes = require('./modules/auth/auth.routes');
-const fineRoutes = require('./modules/fines/fines.routes');
-const paymentRoutes = require('./modules/payments/payments.routes');
-const reportRoutes = require('./modules/reports/reports.routes');
+const authRoutes = require("./routes/auth.routes");
+const userRoutes = require("./routes/user.routes");
+const categoryRoutes = require("./routes/category.routes");
+const fineRoutes = require("./routes/fine.routes");
+const paymentRoutes = require("./routes/payment.routes");
+const districtRoutes = require("./routes/district.routes");
+const notificationRoutes = require("./routes/notification.routes");
+const reportRoutes = require("./routes/report.routes");
 
 const app = express();
 
 // Ensure logs directory exists
-const logsDir = path.join(__dirname, '../logs');
+const logsDir = path.join(__dirname, "../logs");
 if (!fs.existsSync(logsDir)) fs.mkdirSync(logsDir, { recursive: true });
 
 // ─── Security Middleware ───────────────────────────────────────────────────────
@@ -37,39 +41,43 @@ app.use(
       }
     },
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  })
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
 );
 
 app.use(generalLimiter);
 
 // ─── Body Parsing ──────────────────────────────────────────────────────────────
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 
 // ─── Request Logging ───────────────────────────────────────────────────────────
 app.use(
-  morgan('combined', {
+  morgan("combined", {
     stream: { write: (msg) => logger.info(msg.trim()) },
-  })
+  }),
 );
 
 // ─── Health Check ──────────────────────────────────────────────────────────────
-app.get('/health', (req, res) => {
+app.get("/health", (req, res) => {
   res.status(200).json({
     success: true,
-    message: 'Traffic Fine System API is running',
-    version: '1.0.0',
+    message: "Traffic Fine System API is running",
+    version: "1.0.0",
     timestamp: new Date().toISOString(),
   });
 });
 
 // ─── API Routes ────────────────────────────────────────────────────────────────
-app.use('/api/v1/auth', authRoutes);
-app.use('/api/v1/fines', fineRoutes);
-app.use('/api/v1/payments', paymentRoutes);
-app.use('/api/v1/reports', reportRoutes);
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/fine-categories", categoryRoutes);
+app.use("/api/v1/fines", fineRoutes);
+app.use("/api/v1/payments", paymentRoutes);
+app.use("/api/v1/districts", districtRoutes);
+app.use("/api/v1/notifications", notificationRoutes);
+app.use("/api/v1/reports", reportRoutes);
 
 // ─── 404 Handler ───────────────────────────────────────────────────────────────
 app.use((req, res) => {

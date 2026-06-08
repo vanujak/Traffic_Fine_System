@@ -1,25 +1,35 @@
-const express = require('express');
-const { getSummary, getDistrictReport, getCategoryReport, getRevenueReport, getDistricts } = require('./reports.controller');
-const { verifyToken, requireRole } = require('../../middleware/jwtVerify');
-
+const express = require("express");
 const router = express.Router();
+const reportsController = require("./reports.controller");
+const { verifyToken, requireRole } = require("../../middleware/jwtVerify");
 
-// GET /api/v1/reports/districts  (Public — used for dropdowns)
-router.get('/districts', getDistricts);
+// Public: get list of districts
+router.get("/districts", reportsController.getDistricts);
 
-// All routes below are Admin only
-router.use(verifyToken, requireRole('ADMIN'));
-
-// GET /api/v1/reports/summary
-router.get('/summary', getSummary);
-
-// GET /api/v1/reports/district
-router.get('/district', getDistrictReport);
-
-// GET /api/v1/reports/category
-router.get('/category', getCategoryReport);
-
-// GET /api/v1/reports/revenue?year=2026
-router.get('/revenue', getRevenueReport);
+// Protected: summary and reports (ADMIN or OFFICER)
+router.get(
+  "/summary",
+  verifyToken,
+  requireRole("ADMIN", "OFFICER"),
+  reportsController.getSummary,
+);
+router.get(
+  "/district",
+  verifyToken,
+  requireRole("ADMIN", "OFFICER"),
+  reportsController.getDistrictReport,
+);
+router.get(
+  "/category",
+  verifyToken,
+  requireRole("ADMIN", "OFFICER"),
+  reportsController.getCategoryReport,
+);
+router.get(
+  "/revenue",
+  verifyToken,
+  requireRole("ADMIN", "OFFICER"),
+  reportsController.getRevenueReport,
+);
 
 module.exports = router;

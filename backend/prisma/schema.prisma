@@ -26,8 +26,13 @@ model User {
   email     String   @unique
   password  String
   role      Role
+  phone     String?
+  districtId Int?
+  isActive  Boolean  @default(true)
+  refreshToken String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  district  District? @relation("UserDistrict", fields: [districtId], references: [id])
   officer   Officer?
 }
 
@@ -35,6 +40,7 @@ model District {
   id       Int       @id @default(autoincrement())
   name     String    @unique
   officers Officer[]
+  users    User[]    @relation("UserDistrict")
 }
 
 model Officer {
@@ -54,6 +60,7 @@ model FineCategory {
   name        String @unique
   description String?
   amount      Float
+  isActive    Boolean @default(true)
   fines       Fine[]
 }
 
@@ -84,6 +91,7 @@ model Payment {
   payerName     String
   payerPhone    String
   paymentMethod String   @default("ONLINE")
+  status        String   @default("SUCCESS")
   transactionId String?  @unique
   receiptNo     String   @unique
   paidAt        DateTime @default(now())
@@ -94,7 +102,7 @@ model Payment {
 model SMSLog {
   id        Int      @id @default(autoincrement())
   paymentId Int
-  phone     String
+  officerPhone String
   message   String
   status    String
   sid       String?
