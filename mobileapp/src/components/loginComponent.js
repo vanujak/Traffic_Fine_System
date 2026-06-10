@@ -6,55 +6,101 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  ActivityIndicator,
 } from "react-native";
+import { API_BASE_URL } from "../config";
+import { COLORS, COMMON_STYLES } from "../theme";
 
-export default function LoginComponent() {
+export default function LoginComponent({ onRegisterPress, onLoginSuccess }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert("Error", "Please fill all fields");
       return;
     }
 
-    // API call later
-    console.log("Login:", email, password);
-    Alert.alert("Success", "Login button pressed");
+    setLoading(true);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim(), password }),
+      });
+
+      const payload = await response.json();
+
+      if (!response.ok || !payload.success) {
+        throw new Error(payload.message || "Login failed");
+      }
+
+      console.log("Auth user:", payload.data.user);
+      console.log("Access token:", payload.data.accessToken);
+
+      // Call the success callback passed from App.js to trigger redirect
+      if (onLoginSuccess) {
+        onLoginSuccess(payload.data.user, payload.data.accessToken);
+      }
+    } catch (error) {
+      Alert.alert("Error", error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Traffic Fine Payment</Text>
-      <Text style={styles.subtitle}>Sign in to continue</Text>
+      <View style={styles.card}>
+        <Text style={styles.title}>Traffic Fine System</Text>
+        <Text style={styles.subtitle}>Sign in to access your dashboard</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Email Address"
-        keyboardType="email-address"
-        autoCapitalize="none"
-        value={email}
-        onChangeText={setEmail}
-      />
+        <Text style={styles.label}>Email Address</Text>
+        <TextInput
+          style={COMMON_STYLES.input}
+          placeholder="email@example.com"
+          placeholderTextColor={COLORS.textLight}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          value={email}
+          onChangeText={setEmail}
+          disabled={loading}
+        />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
+        <Text style={styles.label}>Password</Text>
+        <TextInput
+          style={COMMON_STYLES.input}
+          placeholder="Enter your password"
+          placeholderTextColor={COLORS.textLight}
+          secureTextEntry
+          value={password}
+          onChangeText={setPassword}
+          disabled={loading}
+        />
 
-      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-        <Text style={styles.loginButtonText}>Login</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={[COMMON_STYLES.button, loading && COMMON_STYLES.buttonDisabled]}
+          onPress={handleLogin}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator color={COLORS.white} size="small" />
+          ) : (
+            <Text style={COMMON_STYLES.buttonText}>Sign In</Text>
+          )}
+        </TouchableOpacity>
 
-      <TouchableOpacity>
-        <Text style={styles.forgotText}>Forgot Password?</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.forgotBtn}>
+          <Text style={styles.forgotText}>Forgot Password?</Text>
+        </TouchableOpacity>
+      </View>
 
-      <TouchableOpacity>
-        <Text style={styles.registerText}>Don’t have an account? Register</Text>
+      <TouchableOpacity style={styles.registerBtn} onPress={onRegisterPress} disabled={loading}>
+        <Text style={styles.registerText}>
+          Don't have an account? <Text style={styles.registerLink}>Register here</Text>
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -63,53 +109,49 @@ export default function LoginComponent() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5F7FA",
+    backgroundColor: COLORS.background,
     justifyContent: "center",
-    paddingHorizontal: 25,
+    paddingHorizontal: 20,
+  },
+  card: {
+    ...COMMON_STYLES.card,
+    paddingVertical: 30,
+    paddingHorizontal: 20,
   },
   title: {
-    fontSize: 30,
-    fontWeight: "bold",
-    textAlign: "center",
-    color: "#1E3A8A",
-    marginBottom: 10,
+    ...COMMON_STYLES.title,
+    color: COLORS.primary,
   },
   subtitle: {
-    fontSize: 16,
-    textAlign: "center",
-    color: "#6B7280",
-    marginBottom: 30,
+    ...COMMON_STYLES.subtitle,
+    marginBottom: 25,
   },
-  input: {
-    backgroundColor: "#FFFFFF",
-    padding: 15,
-    borderRadius: 12,
-    marginBottom: 15,
-    fontSize: 16,
-    borderWidth: 1,
-    borderColor: "#D1D5DB",
+  label: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: COLORS.textSecondary,
+    marginBottom: 6,
+    marginLeft: 2,
   },
-  loginButton: {
-    backgroundColor: "#2563EB",
-    padding: 16,
-    borderRadius: 12,
-    alignItems: "center",
-    marginTop: 10,
-  },
-  loginButtonText: {
-    color: "#FFFFFF",
-    fontSize: 18,
-    fontWeight: "bold",
+  forgotBtn: {
+    marginTop: 15,
+    alignSelf: "center",
   },
   forgotText: {
-    textAlign: "center",
-    color: "#2563EB",
-    marginTop: 20,
+    color: COLORS.accent,
+    fontWeight: "600",
+    fontSize: 14,
+  },
+  registerBtn: {
+    marginTop: 25,
+    alignSelf: "center",
   },
   registerText: {
-    textAlign: "center",
-    color: "#374151",
-    marginTop: 20,
+    color: COLORS.textSecondary,
     fontSize: 15,
+  },
+  registerLink: {
+    color: COLORS.accent,
+    fontWeight: "700",
   },
 });
