@@ -142,3 +142,16 @@ export const getFines = ({ token, ...params } = {}) =>
 
 export const getPayments = ({ token, ...params } = {}) =>
   apiRequest(`/payments${buildQueryString(params)}`, { token });
+
+export const getDistricts = (token) =>
+  apiRequest("/districts", { token, skipAuth: !token });
+
+export const getUsers = ({ token, ...params } = {}) =>
+  apiRequest(`/users${buildQueryString(params)}`, { token });
+
+export const registerOfficer = (payload, token) =>
+  apiRequest("/auth/register", {
+    method: "POST",
+    body: payload,
+    token,
+  });
