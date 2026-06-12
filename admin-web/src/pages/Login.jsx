@@ -1,95 +1,90 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext.jsx";
 
-export default function Login({ onLoginSuccess }) {
+export default function Login() {
+  const { login, isAuthenticated, loading, error: sessionError } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const redirectTo = location.state?.from?.pathname || "/";
+
+  useEffect(() => {
+    document.title = "Admin Login | Traffic Fine System";
+  }, []);
+
+  if (!loading && isAuthenticated) {
+    return <Navigate to={redirectTo} replace />;
+  }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setSubmitting(true);
     setError("");
-    setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/v1/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok || !data.success) {
-        throw new Error(data.message || "Invalid credentials");
-      }
-
-      const { accessToken, user } = data.data;
-
-      if (user.role !== "ADMIN") {
-        throw new Error("Access denied. Only administrators are allowed.");
-      }
-
-      // Store in localStorage
-      localStorage.setItem("adminToken", accessToken);
-      localStorage.setItem("adminUser", JSON.stringify(user));
-
-      onLoginSuccess();
-    } catch (err) {
-      setError(err.message || "Unable to connect to the server.");
+      await login(email.trim(), password);
+      navigate(redirectTo, { replace: true });
+    } catch (loginError) {
+      setError(loginError.message || "Unable to sign in.");
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
+  const helpText =
+    sessionError ||
+    "Sign in with an admin account to access live traffic fine data.";
+
   return (
-    <div className="login-container">
-      <div className="login-card">
-        <h2>Traffic Fine System</h2>
-        <p className="subtitle">Admin Control Panel</p>
+    <div className="auth-shell">
+      <section className="card auth-card">
+        <div className="auth-brand">
+          <div className="auth-badge">Traffic Fine System</div>
+          <h1>Admin Portal</h1>
+          <p>{helpText}</p>
+        </div>
 
-        {error && <div className="error-message">{error}</div>}
-
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label className="form-label" htmlFor="email">
-              Email Address
-            </label>
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <label>
+            Email
             <input
               type="email"
-              id="email"
-              className="form-input"
-              placeholder="admin@trafficfines.lk"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(event) => setEmail(event.target.value)}
+              placeholder="admin@trafficfines.lk"
+              autoComplete="email"
               required
               disabled={loading}
             />
-          </div>
+          </label>
 
-          <div className="form-group">
-            <label className="form-label" htmlFor="password">
-              Password
-            </label>
+          <label>
+            Password
             <input
               type="password"
-              id="password"
-              className="form-input"
-              placeholder="••••••••"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(event) => setPassword(event.target.value)}
+              placeholder="••••••••"
+              autoComplete="current-password"
               required
               disabled={loading}
             />
-          </div>
+          </label>
 
-          <button type="submit" className="btn-primary" disabled={loading}>
-            {loading ? "Authenticating..." : "Login to Dashboard"}
+          {(error || sessionError) && (
+            <div className="alert alert-error">{error || sessionError}</div>
+          )}
+
+          <button type="submit" className="primary-button" disabled={loading || submitting}>
+            {loading || submitting ? "Authenticating..." : "Login to Dashboard"}
           </button>
         </form>
-      </div>
+      </section>
     </div>
   );
 }
