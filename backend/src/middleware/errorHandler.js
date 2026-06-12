@@ -5,7 +5,13 @@ const logger = require('../config/logger');
  * Must be the LAST middleware added in app.js
  */
 const errorHandler = (err, req, res, next) => {
-  logger.error(err.message, { stack: err.stack, path: req.path, method: req.method });
+  logger.error(err.message, {
+    code: err.code,
+    meta: err.meta,
+    stack: err.stack,
+    path: req.path,
+    method: req.method,
+  });
 
   // Prisma known errors
   if (err.code === 'P2002') {

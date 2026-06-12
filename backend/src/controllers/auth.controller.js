@@ -31,6 +31,47 @@ const buildProfile = (user) => ({
   officer: user.officer || null,
 });
 
+const buildAuthResponse = async (user, statusCode, res) => {
+  const accessToken = signAccessToken(user);
+  const refreshToken = signRefreshToken(user);
+
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { refreshToken },
+  });
+
+  return res.status(statusCode).json({
+    success: true,
+    data: {
+      accessToken,
+      refreshToken,
+      user: buildProfile(user),
+    },
+  });
+};
+
+const signup = async (req, res, next) => {
+  try {
+    const { name, email, password, phone = null } = req.body;
+
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    const user = await prisma.user.create({
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+        role: "USER",
+        phone,
+      },
+    });
+
+    return buildAuthResponse(user, 201, res);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const register = async (req, res, next) => {
   try {
     const {
@@ -42,6 +83,13 @@ const register = async (req, res, next) => {
       districtId = null,
       badgeNo = null,
     } = req.body;
+
+    if (role === "OFFICER" && (!badgeNo || !phone || !districtId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Officer registration requires badgeNo, phone and districtId.",
+      });
+    }
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
@@ -57,14 +105,6 @@ const register = async (req, res, next) => {
     });
 
     if (role === "OFFICER") {
-      if (!badgeNo || !phone || !districtId) {
-        return res.status(400).json({
-          success: false,
-          message:
-            "Officer registration requires badgeNo, phone and districtId.",
-        });
-      }
-
       await prisma.officer.create({
         data: {
           userId: user.id,
@@ -75,22 +115,7 @@ const register = async (req, res, next) => {
       });
     }
 
-    const accessToken = signAccessToken(user);
-    const refreshToken = signRefreshToken(user);
-
-    await prisma.user.update({
-      where: { id: user.id },
-      data: { refreshToken },
-    });
-
-    return res.status(201).json({
-      success: true,
-      data: {
-        accessToken,
-        refreshToken,
-        user: buildProfile(user),
-      },
-    });
+    return buildAuthResponse(user, 201, res);
   } catch (error) {
     next(error);
   }
@@ -123,22 +148,7 @@ const login = async (req, res, next) => {
         .json({ success: false, message: "Invalid email or password." });
     }
 
-    const accessToken = signAccessToken(user);
-    const refreshToken = signRefreshToken(user);
-
-    await prisma.user.update({
-      where: { id: user.id },
-      data: { refreshToken },
-    });
-
-    return res.status(200).json({
-      success: true,
-      data: {
-        accessToken,
-        refreshToken,
-        user: buildProfile(user),
-      },
-    });
+    return buildAuthResponse(user, 200, res);
   } catch (error) {
     next(error);
   }
@@ -214,4 +224,4 @@ const me = async (req, res, next) => {
   }
 };
 
-module.exports = { register, login, refresh, logout, me };
+module.exports = { signup, register, login, refresh, logout, me };

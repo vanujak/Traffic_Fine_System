@@ -239,6 +239,45 @@ const cancelFine = async (req, res, next) => {
   }
 };
 
+const getMotoristFines = async (req, res, next) => {
+  try {
+    const page = Math.max(parseInt(req.query.page || "1", 10), 1);
+    const limit = Math.min(
+      Math.max(parseInt(req.query.limit || "10", 10), 1),
+      100,
+    );
+    const skip = (page - 1) * limit;
+
+    const userPhone = req.user.phone;
+    if (!userPhone) {
+      return res.status(200).json({
+        success: true,
+        data: [],
+        pagination: { total: 0, page, limit, totalPages: 0 }
+      });
+    }
+
+    const [fines, total] = await Promise.all([
+      prisma.fine.findMany({
+        where: { driverPhone: userPhone },
+        skip,
+        take: limit,
+        orderBy: { createdAt: "desc" },
+        include: { category: true, payment: true },
+      }),
+      prisma.fine.count({ where: { driverPhone: userPhone } }),
+    ]);
+
+    return res.status(200).json({
+      success: true,
+      data: fines,
+      pagination: { total, page, limit, totalPages: Math.ceil(total / limit) },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createFine,
   getFineByReference,
@@ -246,4 +285,5 @@ module.exports = {
   getAllFines,
   getMyFines,
   cancelFine,
+  getMotoristFines,
 };

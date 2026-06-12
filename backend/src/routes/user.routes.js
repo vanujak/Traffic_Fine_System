@@ -46,8 +46,8 @@ router.post(
       .isLength({ min: 6 })
       .withMessage("Password must be at least 6 characters"),
     body("role")
-      .isIn(["OFFICER", "ADMIN"])
-      .withMessage("Role must be OFFICER or ADMIN"),
+      .isIn(["USER", "OFFICER", "ADMIN"])
+      .withMessage("Role must be USER, OFFICER or ADMIN"),
     body("phone").optional().isString().withMessage("Phone must be a string"),
     body("districtId")
       .optional()
@@ -79,8 +79,8 @@ router.put(
       .withMessage("districtId must be an integer or null"),
     body("role")
       .optional()
-      .isIn(["OFFICER", "ADMIN"])
-      .withMessage("Role must be OFFICER or ADMIN"),
+      .isIn(["USER", "OFFICER", "ADMIN"])
+      .withMessage("Role must be USER, OFFICER or ADMIN"),
     body("badgeNo")
       .optional()
       .trim()

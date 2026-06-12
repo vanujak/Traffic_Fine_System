@@ -7,11 +7,23 @@ const {
   getAllFines,
   getMyFines,
   cancelFine,
+  getMotoristFines,
 } = require("../controllers/fine.controller");
 const { verifyToken, requireRole } = require("../middleware/auth");
 const validate = require("../middleware/validate");
 
 const router = express.Router();
+
+router.get(
+  "/motorist/my-fines",
+  verifyToken,
+  [
+    query("page").optional().isInt({ min: 1 }),
+    query("limit").optional().isInt({ min: 1, max: 100 }),
+  ],
+  validate,
+  getMotoristFines
+);
 
 router.get(
   "/officer/my-fines",
