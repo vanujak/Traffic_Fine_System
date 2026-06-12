@@ -5,7 +5,6 @@ const navItems = [
   { label: "Fines", path: "/fines" },
   { label: "Payments", path: "/payments" },
   { label: "Reports", path: "/reports" },
-  { label: "Police Officers", path: "/officers" },
 ];
 
 export default function Sidebar() {
@@ -27,7 +26,7 @@ export default function Sidebar() {
       </nav>
       <div className="card">
         <h3>System Status</h3>
-        <p>Operational</p>
+        <p>Live backend connected</p>
       </div>
     </aside>
   );

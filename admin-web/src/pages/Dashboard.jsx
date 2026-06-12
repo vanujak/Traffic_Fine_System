@@ -1,34 +1,56 @@
+import { useEffect, useState } from "react";
 import StatCard from "../components/StatCard.jsx";
-
-const stats = [
-  { title: "Total Fines", value: "12,480", trend: "+8% this month" },
-  { title: "Total Revenue", value: "LKR 58.2M", trend: "+12%" },
-  { title: "Paid Today", value: "1,204", trend: "+4%" },
-  { title: "Pending Fines", value: "620", trend: "-3%" },
-];
-
-const recentPayments = [
-  {
-    ref: "TF-20491",
-    officer: "Inspector Perera",
-    amount: "LKR 5,000",
-    status: "Paid",
-  },
-  {
-    ref: "TF-20492",
-    officer: "SI Silva",
-    amount: "LKR 2,500",
-    status: "Paid",
-  },
-  {
-    ref: "TF-20493",
-    officer: "IP Fernando",
-    amount: "LKR 7,500",
-    status: "Pending",
-  },
-];
+import { getDashboardSummary, getPayments } from "../api/client.js";
+import {
+  formatCurrencyLkr,
+  formatDateTime,
+  formatNumber,
+  statusBadgeClass,
+} from "../utils/format.js";
 
 export default function Dashboard() {
+  const [summary, setSummary] = useState(null);
+  const [recentPayments, setRecentPayments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const loadDashboard = async () => {
+      setLoading(true);
+      setError("");
+
+      try {
+        const [summaryResponse, paymentsResponse] = await Promise.all([
+          getDashboardSummary(),
+          getPayments({ limit: 5 }),
+        ]);
+
+        setSummary(summaryResponse?.data ?? null);
+        setRecentPayments(paymentsResponse?.data ?? []);
+      } catch (dashboardError) {
+        setError(dashboardError.message || "Unable to load dashboard data.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadDashboard();
+  }, []);
+
+  const stats = summary
+    ? [
+        { title: "Total Fines", value: formatNumber(summary.totalFines), trend: `${formatNumber(summary.totalPaid)} paid` },
+        { title: "Total Revenue", value: formatCurrencyLkr(summary.totalRevenue), trend: `${formatNumber(summary.totalCancelled)} cancelled` },
+        { title: "Paid Fines", value: formatNumber(summary.totalPaid), trend: `${formatNumber(summary.totalPending)} pending` },
+        { title: "Pending Fines", value: formatNumber(summary.totalPending), trend: "Live count from backend" },
+      ]
+    : [
+        { title: "Total Fines", value: loading ? "Loading..." : "—" },
+        { title: "Total Revenue", value: loading ? "Loading..." : "—" },
+        { title: "Paid Fines", value: loading ? "Loading..." : "—" },
+        { title: "Pending Fines", value: loading ? "Loading..." : "—" },
+      ];
+
   return (
     <div>
       <section className="grid grid-4">
@@ -39,26 +61,33 @@ export default function Dashboard() {
 
       <section className="section card">
         <h3>Recent Payments</h3>
+        {error ? <div className="alert alert-error">{error}</div> : null}
         <table className="table">
           <thead>
             <tr>
               <th>Reference</th>
               <th>Officer</th>
               <th>Amount</th>
+              <th>Paid At</th>
               <th>Status</th>
             </tr>
           </thead>
           <tbody>
-            {recentPayments.map((payment) => (
-              <tr key={payment.ref}>
-                <td>{payment.ref}</td>
-                <td>{payment.officer}</td>
-                <td>{payment.amount}</td>
-                <td>
-                  <span className="badge">{payment.status}</span>
-                </td>
+            {recentPayments.length > 0 ? (
+              recentPayments.map((payment) => (
+                <tr key={payment.id}>
+                  <td>{payment.fine?.referenceNo || payment.receiptNo}</td>
+                  <td>{payment.fine?.officer?.user?.name || payment.fine?.officer?.badgeNo || "—"}</td>
+                  <td>{formatCurrencyLkr(payment.amount)}</td>
+                  <td>{formatDateTime(payment.paidAt)}</td>
+                  <td><span className={statusBadgeClass(payment.status)}>{payment.status}</span></td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5">{loading ? "Loading payments..." : "No recent payments found."}</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </section>
