@@ -20,6 +20,7 @@ const paymentRoutes = require("./routes/payment.routes");
 const districtRoutes = require("./routes/district.routes");
 const notificationRoutes = require("./routes/notification.routes");
 const reportRoutes = require("./routes/report.routes");
+const cardRoutes = require("./routes/card.routes");
 
 const app = express();
 
@@ -78,6 +79,7 @@ app.use("/api/v1/payments", paymentRoutes);
 app.use("/api/v1/districts", districtRoutes);
 app.use("/api/v1/notifications", notificationRoutes);
 app.use("/api/v1/reports", reportRoutes);
+app.use("/api/v1/users/me/cards", cardRoutes);
 
 // ─── 404 Handler ───────────────────────────────────────────────────────────────
 app.use((req, res) => {

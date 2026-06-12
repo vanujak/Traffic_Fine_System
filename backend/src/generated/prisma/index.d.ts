@@ -54,6 +54,7 @@ export type SMSLog = $Result.DefaultSelection<Prisma.$SMSLogPayload>
  */
 export namespace $Enums {
   export const Role: {
+  USER: 'USER',
   OFFICER: 'OFFICER',
   ADMIN: 'ADMIN'
 };
@@ -1443,10 +1444,12 @@ export namespace Prisma {
 
   export type DistrictCountOutputType = {
     officers: number
+    users: number
   }
 
   export type DistrictCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     officers?: boolean | DistrictCountOutputTypeCountOfficersArgs
+    users?: boolean | DistrictCountOutputTypeCountUsersArgs
   }
 
   // Custom InputTypes
@@ -1465,6 +1468,13 @@ export namespace Prisma {
    */
   export type DistrictCountOutputTypeCountOfficersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: OfficerWhereInput
+  }
+
+  /**
+   * DistrictCountOutputType without action
+   */
+  export type DistrictCountOutputTypeCountUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserWhereInput
   }
 
 
@@ -1579,10 +1589,12 @@ export namespace Prisma {
 
   export type UserAvgAggregateOutputType = {
     id: number | null
+    districtId: number | null
   }
 
   export type UserSumAggregateOutputType = {
     id: number | null
+    districtId: number | null
   }
 
   export type UserMinAggregateOutputType = {
@@ -1591,6 +1603,10 @@ export namespace Prisma {
     email: string | null
     password: string | null
     role: $Enums.Role | null
+    phone: string | null
+    districtId: number | null
+    isActive: boolean | null
+    refreshToken: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1601,6 +1617,10 @@ export namespace Prisma {
     email: string | null
     password: string | null
     role: $Enums.Role | null
+    phone: string | null
+    districtId: number | null
+    isActive: boolean | null
+    refreshToken: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1611,6 +1631,10 @@ export namespace Prisma {
     email: number
     password: number
     role: number
+    phone: number
+    districtId: number
+    isActive: number
+    refreshToken: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -1619,10 +1643,12 @@ export namespace Prisma {
 
   export type UserAvgAggregateInputType = {
     id?: true
+    districtId?: true
   }
 
   export type UserSumAggregateInputType = {
     id?: true
+    districtId?: true
   }
 
   export type UserMinAggregateInputType = {
@@ -1631,6 +1657,10 @@ export namespace Prisma {
     email?: true
     password?: true
     role?: true
+    phone?: true
+    districtId?: true
+    isActive?: true
+    refreshToken?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1641,6 +1671,10 @@ export namespace Prisma {
     email?: true
     password?: true
     role?: true
+    phone?: true
+    districtId?: true
+    isActive?: true
+    refreshToken?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1651,6 +1685,10 @@ export namespace Prisma {
     email?: true
     password?: true
     role?: true
+    phone?: true
+    districtId?: true
+    isActive?: true
+    refreshToken?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -1748,6 +1786,10 @@ export namespace Prisma {
     email: string
     password: string
     role: $Enums.Role
+    phone: string | null
+    districtId: number | null
+    isActive: boolean
+    refreshToken: string | null
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -1777,8 +1819,13 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     role?: boolean
+    phone?: boolean
+    districtId?: boolean
+    isActive?: boolean
+    refreshToken?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    district?: boolean | User$districtArgs<ExtArgs>
     officer?: boolean | User$officerArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1788,8 +1835,13 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     role?: boolean
+    phone?: boolean
+    districtId?: boolean
+    isActive?: boolean
+    refreshToken?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    district?: boolean | User$districtArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1798,8 +1850,13 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     role?: boolean
+    phone?: boolean
+    districtId?: boolean
+    isActive?: boolean
+    refreshToken?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    district?: boolean | User$districtArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -1808,20 +1865,30 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     role?: boolean
+    phone?: boolean
+    districtId?: boolean
+    isActive?: boolean
+    refreshToken?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "role" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "role" | "phone" | "districtId" | "isActive" | "refreshToken" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    district?: boolean | User$districtArgs<ExtArgs>
     officer?: boolean | User$officerArgs<ExtArgs>
   }
-  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    district?: boolean | User$districtArgs<ExtArgs>
+  }
+  export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    district?: boolean | User$districtArgs<ExtArgs>
+  }
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
+      district: Prisma.$DistrictPayload<ExtArgs> | null
       officer: Prisma.$OfficerPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -1830,6 +1897,10 @@ export namespace Prisma {
       email: string
       password: string
       role: $Enums.Role
+      phone: string | null
+      districtId: number | null
+      isActive: boolean
+      refreshToken: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -2226,6 +2297,7 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    district<T extends User$districtArgs<ExtArgs> = {}>(args?: Subset<T, User$districtArgs<ExtArgs>>): Prisma__DistrictClient<$Result.GetResult<Prisma.$DistrictPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     officer<T extends User$officerArgs<ExtArgs> = {}>(args?: Subset<T, User$officerArgs<ExtArgs>>): Prisma__OfficerClient<$Result.GetResult<Prisma.$OfficerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2261,6 +2333,10 @@ export namespace Prisma {
     readonly email: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
     readonly role: FieldRef<"User", 'Role'>
+    readonly phone: FieldRef<"User", 'String'>
+    readonly districtId: FieldRef<"User", 'Int'>
+    readonly isActive: FieldRef<"User", 'Boolean'>
+    readonly refreshToken: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
@@ -2517,6 +2593,10 @@ export namespace Prisma {
      */
     data: UserCreateManyInput | UserCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -2587,6 +2667,10 @@ export namespace Prisma {
      * Limit how many Users to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -2653,6 +2737,25 @@ export namespace Prisma {
      * Limit how many Users to delete.
      */
     limit?: number
+  }
+
+  /**
+   * User.district
+   */
+  export type User$districtArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the District
+     */
+    select?: DistrictSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the District
+     */
+    omit?: DistrictOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DistrictInclude<ExtArgs> | null
+    where?: DistrictWhereInput
   }
 
   /**
@@ -2868,6 +2971,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     officers?: boolean | District$officersArgs<ExtArgs>
+    users?: boolean | District$usersArgs<ExtArgs>
     _count?: boolean | DistrictCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["district"]>
 
@@ -2889,6 +2993,7 @@ export namespace Prisma {
   export type DistrictOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name", ExtArgs["result"]["district"]>
   export type DistrictInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     officers?: boolean | District$officersArgs<ExtArgs>
+    users?: boolean | District$usersArgs<ExtArgs>
     _count?: boolean | DistrictCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type DistrictIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2898,6 +3003,7 @@ export namespace Prisma {
     name: "District"
     objects: {
       officers: Prisma.$OfficerPayload<ExtArgs>[]
+      users: Prisma.$UserPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -3297,6 +3403,7 @@ export namespace Prisma {
   export interface Prisma__DistrictClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     officers<T extends District$officersArgs<ExtArgs> = {}>(args?: Subset<T, District$officersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OfficerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    users<T extends District$usersArgs<ExtArgs> = {}>(args?: Subset<T, District$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3742,6 +3849,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: OfficerScalarFieldEnum | OfficerScalarFieldEnum[]
+  }
+
+  /**
+   * District.users
+   */
+  export type District$usersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
+    cursor?: UserWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
   }
 
   /**
@@ -4946,6 +5077,7 @@ export namespace Prisma {
     name: string | null
     description: string | null
     amount: number | null
+    isActive: boolean | null
   }
 
   export type FineCategoryMaxAggregateOutputType = {
@@ -4953,6 +5085,7 @@ export namespace Prisma {
     name: string | null
     description: string | null
     amount: number | null
+    isActive: boolean | null
   }
 
   export type FineCategoryCountAggregateOutputType = {
@@ -4960,6 +5093,7 @@ export namespace Prisma {
     name: number
     description: number
     amount: number
+    isActive: number
     _all: number
   }
 
@@ -4979,6 +5113,7 @@ export namespace Prisma {
     name?: true
     description?: true
     amount?: true
+    isActive?: true
   }
 
   export type FineCategoryMaxAggregateInputType = {
@@ -4986,6 +5121,7 @@ export namespace Prisma {
     name?: true
     description?: true
     amount?: true
+    isActive?: true
   }
 
   export type FineCategoryCountAggregateInputType = {
@@ -4993,6 +5129,7 @@ export namespace Prisma {
     name?: true
     description?: true
     amount?: true
+    isActive?: true
     _all?: true
   }
 
@@ -5087,6 +5224,7 @@ export namespace Prisma {
     name: string
     description: string | null
     amount: number
+    isActive: boolean
     _count: FineCategoryCountAggregateOutputType | null
     _avg: FineCategoryAvgAggregateOutputType | null
     _sum: FineCategorySumAggregateOutputType | null
@@ -5113,6 +5251,7 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     amount?: boolean
+    isActive?: boolean
     fines?: boolean | FineCategory$finesArgs<ExtArgs>
     _count?: boolean | FineCategoryCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["fineCategory"]>
@@ -5122,6 +5261,7 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     amount?: boolean
+    isActive?: boolean
   }, ExtArgs["result"]["fineCategory"]>
 
   export type FineCategorySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -5129,6 +5269,7 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     amount?: boolean
+    isActive?: boolean
   }, ExtArgs["result"]["fineCategory"]>
 
   export type FineCategorySelectScalar = {
@@ -5136,9 +5277,10 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     amount?: boolean
+    isActive?: boolean
   }
 
-  export type FineCategoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "amount", ExtArgs["result"]["fineCategory"]>
+  export type FineCategoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "amount" | "isActive", ExtArgs["result"]["fineCategory"]>
   export type FineCategoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     fines?: boolean | FineCategory$finesArgs<ExtArgs>
     _count?: boolean | FineCategoryCountOutputTypeDefaultArgs<ExtArgs>
@@ -5156,6 +5298,7 @@ export namespace Prisma {
       name: string
       description: string | null
       amount: number
+      isActive: boolean
     }, ExtArgs["result"]["fineCategory"]>
     composites: {}
   }
@@ -5584,6 +5727,7 @@ export namespace Prisma {
     readonly name: FieldRef<"FineCategory", 'String'>
     readonly description: FieldRef<"FineCategory", 'String'>
     readonly amount: FieldRef<"FineCategory", 'Float'>
+    readonly isActive: FieldRef<"FineCategory", 'Boolean'>
   }
     
 
@@ -7303,6 +7447,7 @@ export namespace Prisma {
     payerName: string | null
     payerPhone: string | null
     paymentMethod: string | null
+    status: string | null
     transactionId: string | null
     receiptNo: string | null
     paidAt: Date | null
@@ -7315,6 +7460,7 @@ export namespace Prisma {
     payerName: string | null
     payerPhone: string | null
     paymentMethod: string | null
+    status: string | null
     transactionId: string | null
     receiptNo: string | null
     paidAt: Date | null
@@ -7327,6 +7473,7 @@ export namespace Prisma {
     payerName: number
     payerPhone: number
     paymentMethod: number
+    status: number
     transactionId: number
     receiptNo: number
     paidAt: number
@@ -7353,6 +7500,7 @@ export namespace Prisma {
     payerName?: true
     payerPhone?: true
     paymentMethod?: true
+    status?: true
     transactionId?: true
     receiptNo?: true
     paidAt?: true
@@ -7365,6 +7513,7 @@ export namespace Prisma {
     payerName?: true
     payerPhone?: true
     paymentMethod?: true
+    status?: true
     transactionId?: true
     receiptNo?: true
     paidAt?: true
@@ -7377,6 +7526,7 @@ export namespace Prisma {
     payerName?: true
     payerPhone?: true
     paymentMethod?: true
+    status?: true
     transactionId?: true
     receiptNo?: true
     paidAt?: true
@@ -7476,6 +7626,7 @@ export namespace Prisma {
     payerName: string
     payerPhone: string
     paymentMethod: string
+    status: string
     transactionId: string | null
     receiptNo: string
     paidAt: Date
@@ -7507,6 +7658,7 @@ export namespace Prisma {
     payerName?: boolean
     payerPhone?: boolean
     paymentMethod?: boolean
+    status?: boolean
     transactionId?: boolean
     receiptNo?: boolean
     paidAt?: boolean
@@ -7522,6 +7674,7 @@ export namespace Prisma {
     payerName?: boolean
     payerPhone?: boolean
     paymentMethod?: boolean
+    status?: boolean
     transactionId?: boolean
     receiptNo?: boolean
     paidAt?: boolean
@@ -7535,6 +7688,7 @@ export namespace Prisma {
     payerName?: boolean
     payerPhone?: boolean
     paymentMethod?: boolean
+    status?: boolean
     transactionId?: boolean
     receiptNo?: boolean
     paidAt?: boolean
@@ -7548,12 +7702,13 @@ export namespace Prisma {
     payerName?: boolean
     payerPhone?: boolean
     paymentMethod?: boolean
+    status?: boolean
     transactionId?: boolean
     receiptNo?: boolean
     paidAt?: boolean
   }
 
-  export type PaymentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fineId" | "amount" | "payerName" | "payerPhone" | "paymentMethod" | "transactionId" | "receiptNo" | "paidAt", ExtArgs["result"]["payment"]>
+  export type PaymentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fineId" | "amount" | "payerName" | "payerPhone" | "paymentMethod" | "status" | "transactionId" | "receiptNo" | "paidAt", ExtArgs["result"]["payment"]>
   export type PaymentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     fine?: boolean | FineDefaultArgs<ExtArgs>
     smsLogs?: boolean | Payment$smsLogsArgs<ExtArgs>
@@ -7579,6 +7734,7 @@ export namespace Prisma {
       payerName: string
       payerPhone: string
       paymentMethod: string
+      status: string
       transactionId: string | null
       receiptNo: string
       paidAt: Date
@@ -8013,6 +8169,7 @@ export namespace Prisma {
     readonly payerName: FieldRef<"Payment", 'String'>
     readonly payerPhone: FieldRef<"Payment", 'String'>
     readonly paymentMethod: FieldRef<"Payment", 'String'>
+    readonly status: FieldRef<"Payment", 'String'>
     readonly transactionId: FieldRef<"Payment", 'String'>
     readonly receiptNo: FieldRef<"Payment", 'String'>
     readonly paidAt: FieldRef<"Payment", 'DateTime'>
@@ -8484,7 +8641,7 @@ export namespace Prisma {
   export type SMSLogMinAggregateOutputType = {
     id: number | null
     paymentId: number | null
-    phone: string | null
+    officerPhone: string | null
     message: string | null
     status: string | null
     sid: string | null
@@ -8494,7 +8651,7 @@ export namespace Prisma {
   export type SMSLogMaxAggregateOutputType = {
     id: number | null
     paymentId: number | null
-    phone: string | null
+    officerPhone: string | null
     message: string | null
     status: string | null
     sid: string | null
@@ -8504,7 +8661,7 @@ export namespace Prisma {
   export type SMSLogCountAggregateOutputType = {
     id: number
     paymentId: number
-    phone: number
+    officerPhone: number
     message: number
     status: number
     sid: number
@@ -8526,7 +8683,7 @@ export namespace Prisma {
   export type SMSLogMinAggregateInputType = {
     id?: true
     paymentId?: true
-    phone?: true
+    officerPhone?: true
     message?: true
     status?: true
     sid?: true
@@ -8536,7 +8693,7 @@ export namespace Prisma {
   export type SMSLogMaxAggregateInputType = {
     id?: true
     paymentId?: true
-    phone?: true
+    officerPhone?: true
     message?: true
     status?: true
     sid?: true
@@ -8546,7 +8703,7 @@ export namespace Prisma {
   export type SMSLogCountAggregateInputType = {
     id?: true
     paymentId?: true
-    phone?: true
+    officerPhone?: true
     message?: true
     status?: true
     sid?: true
@@ -8643,7 +8800,7 @@ export namespace Prisma {
   export type SMSLogGroupByOutputType = {
     id: number
     paymentId: number
-    phone: string
+    officerPhone: string
     message: string
     status: string
     sid: string | null
@@ -8672,7 +8829,7 @@ export namespace Prisma {
   export type SMSLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     paymentId?: boolean
-    phone?: boolean
+    officerPhone?: boolean
     message?: boolean
     status?: boolean
     sid?: boolean
@@ -8683,7 +8840,7 @@ export namespace Prisma {
   export type SMSLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     paymentId?: boolean
-    phone?: boolean
+    officerPhone?: boolean
     message?: boolean
     status?: boolean
     sid?: boolean
@@ -8694,7 +8851,7 @@ export namespace Prisma {
   export type SMSLogSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     paymentId?: boolean
-    phone?: boolean
+    officerPhone?: boolean
     message?: boolean
     status?: boolean
     sid?: boolean
@@ -8705,14 +8862,14 @@ export namespace Prisma {
   export type SMSLogSelectScalar = {
     id?: boolean
     paymentId?: boolean
-    phone?: boolean
+    officerPhone?: boolean
     message?: boolean
     status?: boolean
     sid?: boolean
     sentAt?: boolean
   }
 
-  export type SMSLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "paymentId" | "phone" | "message" | "status" | "sid" | "sentAt", ExtArgs["result"]["sMSLog"]>
+  export type SMSLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "paymentId" | "officerPhone" | "message" | "status" | "sid" | "sentAt", ExtArgs["result"]["sMSLog"]>
   export type SMSLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     payment?: boolean | PaymentDefaultArgs<ExtArgs>
   }
@@ -8731,7 +8888,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: number
       paymentId: number
-      phone: string
+      officerPhone: string
       message: string
       status: string
       sid: string | null
@@ -9162,7 +9319,7 @@ export namespace Prisma {
   interface SMSLogFieldRefs {
     readonly id: FieldRef<"SMSLog", 'Int'>
     readonly paymentId: FieldRef<"SMSLog", 'Int'>
-    readonly phone: FieldRef<"SMSLog", 'String'>
+    readonly officerPhone: FieldRef<"SMSLog", 'String'>
     readonly message: FieldRef<"SMSLog", 'String'>
     readonly status: FieldRef<"SMSLog", 'String'>
     readonly sid: FieldRef<"SMSLog", 'String'>
@@ -9606,6 +9763,10 @@ export namespace Prisma {
     email: 'email',
     password: 'password',
     role: 'role',
+    phone: 'phone',
+    districtId: 'districtId',
+    isActive: 'isActive',
+    refreshToken: 'refreshToken',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -9637,7 +9798,8 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     description: 'description',
-    amount: 'amount'
+    amount: 'amount',
+    isActive: 'isActive'
   };
 
   export type FineCategoryScalarFieldEnum = (typeof FineCategoryScalarFieldEnum)[keyof typeof FineCategoryScalarFieldEnum]
@@ -9670,6 +9832,7 @@ export namespace Prisma {
     payerName: 'payerName',
     payerPhone: 'payerPhone',
     paymentMethod: 'paymentMethod',
+    status: 'status',
     transactionId: 'transactionId',
     receiptNo: 'receiptNo',
     paidAt: 'paidAt'
@@ -9681,7 +9844,7 @@ export namespace Prisma {
   export const SMSLogScalarFieldEnum: {
     id: 'id',
     paymentId: 'paymentId',
-    phone: 'phone',
+    officerPhone: 'officerPhone',
     message: 'message',
     status: 'status',
     sid: 'sid',
@@ -9763,6 +9926,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -9816,8 +9986,13 @@ export namespace Prisma {
     email?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     role?: EnumRoleFilter<"User"> | $Enums.Role
+    phone?: StringNullableFilter<"User"> | string | null
+    districtId?: IntNullableFilter<"User"> | number | null
+    isActive?: BoolFilter<"User"> | boolean
+    refreshToken?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    district?: XOR<DistrictNullableScalarRelationFilter, DistrictWhereInput> | null
     officer?: XOR<OfficerNullableScalarRelationFilter, OfficerWhereInput> | null
   }
 
@@ -9827,8 +10002,13 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     role?: SortOrder
+    phone?: SortOrderInput | SortOrder
+    districtId?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    refreshToken?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    district?: DistrictOrderByWithRelationInput
     officer?: OfficerOrderByWithRelationInput
   }
 
@@ -9841,8 +10021,13 @@ export namespace Prisma {
     name?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     role?: EnumRoleFilter<"User"> | $Enums.Role
+    phone?: StringNullableFilter<"User"> | string | null
+    districtId?: IntNullableFilter<"User"> | number | null
+    isActive?: BoolFilter<"User"> | boolean
+    refreshToken?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    district?: XOR<DistrictNullableScalarRelationFilter, DistrictWhereInput> | null
     officer?: XOR<OfficerNullableScalarRelationFilter, OfficerWhereInput> | null
   }, "id" | "email">
 
@@ -9852,6 +10037,10 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     role?: SortOrder
+    phone?: SortOrderInput | SortOrder
+    districtId?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    refreshToken?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -9870,6 +10059,10 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"User"> | string
     password?: StringWithAggregatesFilter<"User"> | string
     role?: EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
+    phone?: StringNullableWithAggregatesFilter<"User"> | string | null
+    districtId?: IntNullableWithAggregatesFilter<"User"> | number | null
+    isActive?: BoolWithAggregatesFilter<"User"> | boolean
+    refreshToken?: StringNullableWithAggregatesFilter<"User"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
@@ -9881,12 +10074,14 @@ export namespace Prisma {
     id?: IntFilter<"District"> | number
     name?: StringFilter<"District"> | string
     officers?: OfficerListRelationFilter
+    users?: UserListRelationFilter
   }
 
   export type DistrictOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
     officers?: OfficerOrderByRelationAggregateInput
+    users?: UserOrderByRelationAggregateInput
   }
 
   export type DistrictWhereUniqueInput = Prisma.AtLeast<{
@@ -9896,6 +10091,7 @@ export namespace Prisma {
     OR?: DistrictWhereInput[]
     NOT?: DistrictWhereInput | DistrictWhereInput[]
     officers?: OfficerListRelationFilter
+    users?: UserListRelationFilter
   }, "id" | "name">
 
   export type DistrictOrderByWithAggregationInput = {
@@ -9992,6 +10188,7 @@ export namespace Prisma {
     name?: StringFilter<"FineCategory"> | string
     description?: StringNullableFilter<"FineCategory"> | string | null
     amount?: FloatFilter<"FineCategory"> | number
+    isActive?: BoolFilter<"FineCategory"> | boolean
     fines?: FineListRelationFilter
   }
 
@@ -10000,6 +10197,7 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrderInput | SortOrder
     amount?: SortOrder
+    isActive?: SortOrder
     fines?: FineOrderByRelationAggregateInput
   }
 
@@ -10011,6 +10209,7 @@ export namespace Prisma {
     NOT?: FineCategoryWhereInput | FineCategoryWhereInput[]
     description?: StringNullableFilter<"FineCategory"> | string | null
     amount?: FloatFilter<"FineCategory"> | number
+    isActive?: BoolFilter<"FineCategory"> | boolean
     fines?: FineListRelationFilter
   }, "id" | "name">
 
@@ -10019,6 +10218,7 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrderInput | SortOrder
     amount?: SortOrder
+    isActive?: SortOrder
     _count?: FineCategoryCountOrderByAggregateInput
     _avg?: FineCategoryAvgOrderByAggregateInput
     _max?: FineCategoryMaxOrderByAggregateInput
@@ -10034,6 +10234,7 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"FineCategory"> | string
     description?: StringNullableWithAggregatesFilter<"FineCategory"> | string | null
     amount?: FloatWithAggregatesFilter<"FineCategory"> | number
+    isActive?: BoolWithAggregatesFilter<"FineCategory"> | boolean
   }
 
   export type FineWhereInput = {
@@ -10154,6 +10355,7 @@ export namespace Prisma {
     payerName?: StringFilter<"Payment"> | string
     payerPhone?: StringFilter<"Payment"> | string
     paymentMethod?: StringFilter<"Payment"> | string
+    status?: StringFilter<"Payment"> | string
     transactionId?: StringNullableFilter<"Payment"> | string | null
     receiptNo?: StringFilter<"Payment"> | string
     paidAt?: DateTimeFilter<"Payment"> | Date | string
@@ -10168,6 +10370,7 @@ export namespace Prisma {
     payerName?: SortOrder
     payerPhone?: SortOrder
     paymentMethod?: SortOrder
+    status?: SortOrder
     transactionId?: SortOrderInput | SortOrder
     receiptNo?: SortOrder
     paidAt?: SortOrder
@@ -10187,6 +10390,7 @@ export namespace Prisma {
     payerName?: StringFilter<"Payment"> | string
     payerPhone?: StringFilter<"Payment"> | string
     paymentMethod?: StringFilter<"Payment"> | string
+    status?: StringFilter<"Payment"> | string
     paidAt?: DateTimeFilter<"Payment"> | Date | string
     fine?: XOR<FineScalarRelationFilter, FineWhereInput>
     smsLogs?: SMSLogListRelationFilter
@@ -10199,6 +10403,7 @@ export namespace Prisma {
     payerName?: SortOrder
     payerPhone?: SortOrder
     paymentMethod?: SortOrder
+    status?: SortOrder
     transactionId?: SortOrderInput | SortOrder
     receiptNo?: SortOrder
     paidAt?: SortOrder
@@ -10219,6 +10424,7 @@ export namespace Prisma {
     payerName?: StringWithAggregatesFilter<"Payment"> | string
     payerPhone?: StringWithAggregatesFilter<"Payment"> | string
     paymentMethod?: StringWithAggregatesFilter<"Payment"> | string
+    status?: StringWithAggregatesFilter<"Payment"> | string
     transactionId?: StringNullableWithAggregatesFilter<"Payment"> | string | null
     receiptNo?: StringWithAggregatesFilter<"Payment"> | string
     paidAt?: DateTimeWithAggregatesFilter<"Payment"> | Date | string
@@ -10230,7 +10436,7 @@ export namespace Prisma {
     NOT?: SMSLogWhereInput | SMSLogWhereInput[]
     id?: IntFilter<"SMSLog"> | number
     paymentId?: IntFilter<"SMSLog"> | number
-    phone?: StringFilter<"SMSLog"> | string
+    officerPhone?: StringFilter<"SMSLog"> | string
     message?: StringFilter<"SMSLog"> | string
     status?: StringFilter<"SMSLog"> | string
     sid?: StringNullableFilter<"SMSLog"> | string | null
@@ -10241,7 +10447,7 @@ export namespace Prisma {
   export type SMSLogOrderByWithRelationInput = {
     id?: SortOrder
     paymentId?: SortOrder
-    phone?: SortOrder
+    officerPhone?: SortOrder
     message?: SortOrder
     status?: SortOrder
     sid?: SortOrderInput | SortOrder
@@ -10255,7 +10461,7 @@ export namespace Prisma {
     OR?: SMSLogWhereInput[]
     NOT?: SMSLogWhereInput | SMSLogWhereInput[]
     paymentId?: IntFilter<"SMSLog"> | number
-    phone?: StringFilter<"SMSLog"> | string
+    officerPhone?: StringFilter<"SMSLog"> | string
     message?: StringFilter<"SMSLog"> | string
     status?: StringFilter<"SMSLog"> | string
     sid?: StringNullableFilter<"SMSLog"> | string | null
@@ -10266,7 +10472,7 @@ export namespace Prisma {
   export type SMSLogOrderByWithAggregationInput = {
     id?: SortOrder
     paymentId?: SortOrder
-    phone?: SortOrder
+    officerPhone?: SortOrder
     message?: SortOrder
     status?: SortOrder
     sid?: SortOrderInput | SortOrder
@@ -10284,7 +10490,7 @@ export namespace Prisma {
     NOT?: SMSLogScalarWhereWithAggregatesInput | SMSLogScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"SMSLog"> | number
     paymentId?: IntWithAggregatesFilter<"SMSLog"> | number
-    phone?: StringWithAggregatesFilter<"SMSLog"> | string
+    officerPhone?: StringWithAggregatesFilter<"SMSLog"> | string
     message?: StringWithAggregatesFilter<"SMSLog"> | string
     status?: StringWithAggregatesFilter<"SMSLog"> | string
     sid?: StringNullableWithAggregatesFilter<"SMSLog"> | string | null
@@ -10296,8 +10502,12 @@ export namespace Prisma {
     email: string
     password: string
     role: $Enums.Role
+    phone?: string | null
+    isActive?: boolean
+    refreshToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    district?: DistrictCreateNestedOneWithoutUsersInput
     officer?: OfficerCreateNestedOneWithoutUserInput
   }
 
@@ -10307,6 +10517,10 @@ export namespace Prisma {
     email: string
     password: string
     role: $Enums.Role
+    phone?: string | null
+    districtId?: number | null
+    isActive?: boolean
+    refreshToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     officer?: OfficerUncheckedCreateNestedOneWithoutUserInput
@@ -10317,8 +10531,12 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    district?: DistrictUpdateOneWithoutUsersNestedInput
     officer?: OfficerUpdateOneWithoutUserNestedInput
   }
 
@@ -10328,6 +10546,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    districtId?: NullableIntFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     officer?: OfficerUncheckedUpdateOneWithoutUserNestedInput
@@ -10339,6 +10561,10 @@ export namespace Prisma {
     email: string
     password: string
     role: $Enums.Role
+    phone?: string | null
+    districtId?: number | null
+    isActive?: boolean
+    refreshToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -10348,6 +10574,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -10358,6 +10587,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    districtId?: NullableIntFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -10365,23 +10598,27 @@ export namespace Prisma {
   export type DistrictCreateInput = {
     name: string
     officers?: OfficerCreateNestedManyWithoutDistrictInput
+    users?: UserCreateNestedManyWithoutDistrictInput
   }
 
   export type DistrictUncheckedCreateInput = {
     id?: number
     name: string
     officers?: OfficerUncheckedCreateNestedManyWithoutDistrictInput
+    users?: UserUncheckedCreateNestedManyWithoutDistrictInput
   }
 
   export type DistrictUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     officers?: OfficerUpdateManyWithoutDistrictNestedInput
+    users?: UserUpdateManyWithoutDistrictNestedInput
   }
 
   export type DistrictUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     officers?: OfficerUncheckedUpdateManyWithoutDistrictNestedInput
+    users?: UserUncheckedUpdateManyWithoutDistrictNestedInput
   }
 
   export type DistrictCreateManyInput = {
@@ -10464,6 +10701,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     amount: number
+    isActive?: boolean
     fines?: FineCreateNestedManyWithoutCategoryInput
   }
 
@@ -10472,6 +10710,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     amount: number
+    isActive?: boolean
     fines?: FineUncheckedCreateNestedManyWithoutCategoryInput
   }
 
@@ -10479,6 +10718,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     amount?: FloatFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     fines?: FineUpdateManyWithoutCategoryNestedInput
   }
 
@@ -10487,6 +10727,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     amount?: FloatFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     fines?: FineUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
@@ -10495,12 +10736,14 @@ export namespace Prisma {
     name: string
     description?: string | null
     amount: number
+    isActive?: boolean
   }
 
   export type FineCategoryUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     amount?: FloatFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type FineCategoryUncheckedUpdateManyInput = {
@@ -10508,6 +10751,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     amount?: FloatFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type FineCreateInput = {
@@ -10633,6 +10877,7 @@ export namespace Prisma {
     payerName: string
     payerPhone: string
     paymentMethod?: string
+    status?: string
     transactionId?: string | null
     receiptNo: string
     paidAt?: Date | string
@@ -10647,6 +10892,7 @@ export namespace Prisma {
     payerName: string
     payerPhone: string
     paymentMethod?: string
+    status?: string
     transactionId?: string | null
     receiptNo: string
     paidAt?: Date | string
@@ -10658,6 +10904,7 @@ export namespace Prisma {
     payerName?: StringFieldUpdateOperationsInput | string
     payerPhone?: StringFieldUpdateOperationsInput | string
     paymentMethod?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     receiptNo?: StringFieldUpdateOperationsInput | string
     paidAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10672,6 +10919,7 @@ export namespace Prisma {
     payerName?: StringFieldUpdateOperationsInput | string
     payerPhone?: StringFieldUpdateOperationsInput | string
     paymentMethod?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     receiptNo?: StringFieldUpdateOperationsInput | string
     paidAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10685,6 +10933,7 @@ export namespace Prisma {
     payerName: string
     payerPhone: string
     paymentMethod?: string
+    status?: string
     transactionId?: string | null
     receiptNo: string
     paidAt?: Date | string
@@ -10695,6 +10944,7 @@ export namespace Prisma {
     payerName?: StringFieldUpdateOperationsInput | string
     payerPhone?: StringFieldUpdateOperationsInput | string
     paymentMethod?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     receiptNo?: StringFieldUpdateOperationsInput | string
     paidAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10707,13 +10957,14 @@ export namespace Prisma {
     payerName?: StringFieldUpdateOperationsInput | string
     payerPhone?: StringFieldUpdateOperationsInput | string
     paymentMethod?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     receiptNo?: StringFieldUpdateOperationsInput | string
     paidAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SMSLogCreateInput = {
-    phone: string
+    officerPhone: string
     message: string
     status: string
     sid?: string | null
@@ -10724,7 +10975,7 @@ export namespace Prisma {
   export type SMSLogUncheckedCreateInput = {
     id?: number
     paymentId: number
-    phone: string
+    officerPhone: string
     message: string
     status: string
     sid?: string | null
@@ -10732,7 +10983,7 @@ export namespace Prisma {
   }
 
   export type SMSLogUpdateInput = {
-    phone?: StringFieldUpdateOperationsInput | string
+    officerPhone?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     sid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10743,7 +10994,7 @@ export namespace Prisma {
   export type SMSLogUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     paymentId?: IntFieldUpdateOperationsInput | number
-    phone?: StringFieldUpdateOperationsInput | string
+    officerPhone?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     sid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10753,7 +11004,7 @@ export namespace Prisma {
   export type SMSLogCreateManyInput = {
     id?: number
     paymentId: number
-    phone: string
+    officerPhone: string
     message: string
     status: string
     sid?: string | null
@@ -10761,7 +11012,7 @@ export namespace Prisma {
   }
 
   export type SMSLogUpdateManyMutationInput = {
-    phone?: StringFieldUpdateOperationsInput | string
+    officerPhone?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     sid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10771,7 +11022,7 @@ export namespace Prisma {
   export type SMSLogUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     paymentId?: IntFieldUpdateOperationsInput | number
-    phone?: StringFieldUpdateOperationsInput | string
+    officerPhone?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     sid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10811,6 +11062,37 @@ export namespace Prisma {
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -10822,9 +11104,19 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type DistrictNullableScalarRelationFilter = {
+    is?: DistrictWhereInput | null
+    isNot?: DistrictWhereInput | null
+  }
+
   export type OfficerNullableScalarRelationFilter = {
     is?: OfficerWhereInput | null
     isNot?: OfficerWhereInput | null
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
   }
 
   export type UserCountOrderByAggregateInput = {
@@ -10833,12 +11125,17 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     role?: SortOrder
+    phone?: SortOrder
+    districtId?: SortOrder
+    isActive?: SortOrder
+    refreshToken?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type UserAvgOrderByAggregateInput = {
     id?: SortOrder
+    districtId?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -10847,6 +11144,10 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     role?: SortOrder
+    phone?: SortOrder
+    districtId?: SortOrder
+    isActive?: SortOrder
+    refreshToken?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -10857,12 +11158,17 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     role?: SortOrder
+    phone?: SortOrder
+    districtId?: SortOrder
+    isActive?: SortOrder
+    refreshToken?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
     id?: SortOrder
+    districtId?: SortOrder
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -10909,6 +11215,48 @@ export namespace Prisma {
     _max?: NestedEnumRoleFilter<$PrismaModel>
   }
 
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -10929,7 +11277,17 @@ export namespace Prisma {
     none?: OfficerWhereInput
   }
 
+  export type UserListRelationFilter = {
+    every?: UserWhereInput
+    some?: UserWhereInput
+    none?: UserWhereInput
+  }
+
   export type OfficerOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UserOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -11015,21 +11373,6 @@ export namespace Prisma {
     districtId?: SortOrder
   }
 
-  export type StringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
   export type FloatFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -11041,16 +11384,12 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
-  }
-
   export type FineCategoryCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
     amount?: SortOrder
+    isActive?: SortOrder
   }
 
   export type FineCategoryAvgOrderByAggregateInput = {
@@ -11063,6 +11402,7 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     amount?: SortOrder
+    isActive?: SortOrder
   }
 
   export type FineCategoryMinOrderByAggregateInput = {
@@ -11070,29 +11410,12 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     amount?: SortOrder
+    isActive?: SortOrder
   }
 
   export type FineCategorySumOrderByAggregateInput = {
     id?: SortOrder
     amount?: SortOrder
-  }
-
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type FloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -11228,6 +11551,7 @@ export namespace Prisma {
     payerName?: SortOrder
     payerPhone?: SortOrder
     paymentMethod?: SortOrder
+    status?: SortOrder
     transactionId?: SortOrder
     receiptNo?: SortOrder
     paidAt?: SortOrder
@@ -11246,6 +11570,7 @@ export namespace Prisma {
     payerName?: SortOrder
     payerPhone?: SortOrder
     paymentMethod?: SortOrder
+    status?: SortOrder
     transactionId?: SortOrder
     receiptNo?: SortOrder
     paidAt?: SortOrder
@@ -11258,6 +11583,7 @@ export namespace Prisma {
     payerName?: SortOrder
     payerPhone?: SortOrder
     paymentMethod?: SortOrder
+    status?: SortOrder
     transactionId?: SortOrder
     receiptNo?: SortOrder
     paidAt?: SortOrder
@@ -11277,7 +11603,7 @@ export namespace Prisma {
   export type SMSLogCountOrderByAggregateInput = {
     id?: SortOrder
     paymentId?: SortOrder
-    phone?: SortOrder
+    officerPhone?: SortOrder
     message?: SortOrder
     status?: SortOrder
     sid?: SortOrder
@@ -11292,7 +11618,7 @@ export namespace Prisma {
   export type SMSLogMaxOrderByAggregateInput = {
     id?: SortOrder
     paymentId?: SortOrder
-    phone?: SortOrder
+    officerPhone?: SortOrder
     message?: SortOrder
     status?: SortOrder
     sid?: SortOrder
@@ -11302,7 +11628,7 @@ export namespace Prisma {
   export type SMSLogMinOrderByAggregateInput = {
     id?: SortOrder
     paymentId?: SortOrder
-    phone?: SortOrder
+    officerPhone?: SortOrder
     message?: SortOrder
     status?: SortOrder
     sid?: SortOrder
@@ -11312,6 +11638,12 @@ export namespace Prisma {
   export type SMSLogSumOrderByAggregateInput = {
     id?: SortOrder
     paymentId?: SortOrder
+  }
+
+  export type DistrictCreateNestedOneWithoutUsersInput = {
+    create?: XOR<DistrictCreateWithoutUsersInput, DistrictUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: DistrictCreateOrConnectWithoutUsersInput
+    connect?: DistrictWhereUniqueInput
   }
 
   export type OfficerCreateNestedOneWithoutUserInput = {
@@ -11334,8 +11666,26 @@ export namespace Prisma {
     set?: $Enums.Role
   }
 
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type DistrictUpdateOneWithoutUsersNestedInput = {
+    create?: XOR<DistrictCreateWithoutUsersInput, DistrictUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: DistrictCreateOrConnectWithoutUsersInput
+    upsert?: DistrictUpsertWithoutUsersInput
+    disconnect?: DistrictWhereInput | boolean
+    delete?: DistrictWhereInput | boolean
+    connect?: DistrictWhereUniqueInput
+    update?: XOR<XOR<DistrictUpdateToOneWithWhereWithoutUsersInput, DistrictUpdateWithoutUsersInput>, DistrictUncheckedUpdateWithoutUsersInput>
   }
 
   export type OfficerUpdateOneWithoutUserNestedInput = {
@@ -11350,6 +11700,14 @@ export namespace Prisma {
 
   export type IntFieldUpdateOperationsInput = {
     set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
     increment?: number
     decrement?: number
     multiply?: number
@@ -11373,11 +11731,25 @@ export namespace Prisma {
     connect?: OfficerWhereUniqueInput | OfficerWhereUniqueInput[]
   }
 
+  export type UserCreateNestedManyWithoutDistrictInput = {
+    create?: XOR<UserCreateWithoutDistrictInput, UserUncheckedCreateWithoutDistrictInput> | UserCreateWithoutDistrictInput[] | UserUncheckedCreateWithoutDistrictInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutDistrictInput | UserCreateOrConnectWithoutDistrictInput[]
+    createMany?: UserCreateManyDistrictInputEnvelope
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  }
+
   export type OfficerUncheckedCreateNestedManyWithoutDistrictInput = {
     create?: XOR<OfficerCreateWithoutDistrictInput, OfficerUncheckedCreateWithoutDistrictInput> | OfficerCreateWithoutDistrictInput[] | OfficerUncheckedCreateWithoutDistrictInput[]
     connectOrCreate?: OfficerCreateOrConnectWithoutDistrictInput | OfficerCreateOrConnectWithoutDistrictInput[]
     createMany?: OfficerCreateManyDistrictInputEnvelope
     connect?: OfficerWhereUniqueInput | OfficerWhereUniqueInput[]
+  }
+
+  export type UserUncheckedCreateNestedManyWithoutDistrictInput = {
+    create?: XOR<UserCreateWithoutDistrictInput, UserUncheckedCreateWithoutDistrictInput> | UserCreateWithoutDistrictInput[] | UserUncheckedCreateWithoutDistrictInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutDistrictInput | UserCreateOrConnectWithoutDistrictInput[]
+    createMany?: UserCreateManyDistrictInputEnvelope
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
   }
 
   export type OfficerUpdateManyWithoutDistrictNestedInput = {
@@ -11394,6 +11766,20 @@ export namespace Prisma {
     deleteMany?: OfficerScalarWhereInput | OfficerScalarWhereInput[]
   }
 
+  export type UserUpdateManyWithoutDistrictNestedInput = {
+    create?: XOR<UserCreateWithoutDistrictInput, UserUncheckedCreateWithoutDistrictInput> | UserCreateWithoutDistrictInput[] | UserUncheckedCreateWithoutDistrictInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutDistrictInput | UserCreateOrConnectWithoutDistrictInput[]
+    upsert?: UserUpsertWithWhereUniqueWithoutDistrictInput | UserUpsertWithWhereUniqueWithoutDistrictInput[]
+    createMany?: UserCreateManyDistrictInputEnvelope
+    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    update?: UserUpdateWithWhereUniqueWithoutDistrictInput | UserUpdateWithWhereUniqueWithoutDistrictInput[]
+    updateMany?: UserUpdateManyWithWhereWithoutDistrictInput | UserUpdateManyWithWhereWithoutDistrictInput[]
+    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  }
+
   export type OfficerUncheckedUpdateManyWithoutDistrictNestedInput = {
     create?: XOR<OfficerCreateWithoutDistrictInput, OfficerUncheckedCreateWithoutDistrictInput> | OfficerCreateWithoutDistrictInput[] | OfficerUncheckedCreateWithoutDistrictInput[]
     connectOrCreate?: OfficerCreateOrConnectWithoutDistrictInput | OfficerCreateOrConnectWithoutDistrictInput[]
@@ -11406,6 +11792,20 @@ export namespace Prisma {
     update?: OfficerUpdateWithWhereUniqueWithoutDistrictInput | OfficerUpdateWithWhereUniqueWithoutDistrictInput[]
     updateMany?: OfficerUpdateManyWithWhereWithoutDistrictInput | OfficerUpdateManyWithWhereWithoutDistrictInput[]
     deleteMany?: OfficerScalarWhereInput | OfficerScalarWhereInput[]
+  }
+
+  export type UserUncheckedUpdateManyWithoutDistrictNestedInput = {
+    create?: XOR<UserCreateWithoutDistrictInput, UserUncheckedCreateWithoutDistrictInput> | UserCreateWithoutDistrictInput[] | UserUncheckedCreateWithoutDistrictInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutDistrictInput | UserCreateOrConnectWithoutDistrictInput[]
+    upsert?: UserUpsertWithWhereUniqueWithoutDistrictInput | UserUpsertWithWhereUniqueWithoutDistrictInput[]
+    createMany?: UserCreateManyDistrictInputEnvelope
+    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    update?: UserUpdateWithWhereUniqueWithoutDistrictInput | UserUpdateWithWhereUniqueWithoutDistrictInput[]
+    updateMany?: UserUpdateManyWithWhereWithoutDistrictInput | UserUpdateManyWithWhereWithoutDistrictInput[]
+    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutOfficerInput = {
@@ -11490,10 +11890,6 @@ export namespace Prisma {
     connectOrCreate?: FineCreateOrConnectWithoutCategoryInput | FineCreateOrConnectWithoutCategoryInput[]
     createMany?: FineCreateManyCategoryInputEnvelope
     connect?: FineWhereUniqueInput | FineWhereUniqueInput[]
-  }
-
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
   }
 
   export type FloatFieldUpdateOperationsInput = {
@@ -11698,6 +12094,36 @@ export namespace Prisma {
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
   }
 
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -11763,34 +12189,6 @@ export namespace Prisma {
     _max?: NestedEnumRoleFilter<$PrismaModel>
   }
 
-  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type NestedStringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -11808,7 +12206,7 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
     notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -11816,7 +12214,45 @@ export namespace Prisma {
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -11852,6 +12288,22 @@ export namespace Prisma {
     _max?: NestedEnumFineStatusFilter<$PrismaModel>
   }
 
+  export type DistrictCreateWithoutUsersInput = {
+    name: string
+    officers?: OfficerCreateNestedManyWithoutDistrictInput
+  }
+
+  export type DistrictUncheckedCreateWithoutUsersInput = {
+    id?: number
+    name: string
+    officers?: OfficerUncheckedCreateNestedManyWithoutDistrictInput
+  }
+
+  export type DistrictCreateOrConnectWithoutUsersInput = {
+    where: DistrictWhereUniqueInput
+    create: XOR<DistrictCreateWithoutUsersInput, DistrictUncheckedCreateWithoutUsersInput>
+  }
+
   export type OfficerCreateWithoutUserInput = {
     badgeNo: string
     phone: string
@@ -11872,6 +12324,28 @@ export namespace Prisma {
   export type OfficerCreateOrConnectWithoutUserInput = {
     where: OfficerWhereUniqueInput
     create: XOR<OfficerCreateWithoutUserInput, OfficerUncheckedCreateWithoutUserInput>
+  }
+
+  export type DistrictUpsertWithoutUsersInput = {
+    update: XOR<DistrictUpdateWithoutUsersInput, DistrictUncheckedUpdateWithoutUsersInput>
+    create: XOR<DistrictCreateWithoutUsersInput, DistrictUncheckedCreateWithoutUsersInput>
+    where?: DistrictWhereInput
+  }
+
+  export type DistrictUpdateToOneWithWhereWithoutUsersInput = {
+    where?: DistrictWhereInput
+    data: XOR<DistrictUpdateWithoutUsersInput, DistrictUncheckedUpdateWithoutUsersInput>
+  }
+
+  export type DistrictUpdateWithoutUsersInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    officers?: OfficerUpdateManyWithoutDistrictNestedInput
+  }
+
+  export type DistrictUncheckedUpdateWithoutUsersInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    officers?: OfficerUncheckedUpdateManyWithoutDistrictNestedInput
   }
 
   export type OfficerUpsertWithoutUserInput = {
@@ -11929,6 +12403,43 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type UserCreateWithoutDistrictInput = {
+    name: string
+    email: string
+    password: string
+    role: $Enums.Role
+    phone?: string | null
+    isActive?: boolean
+    refreshToken?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    officer?: OfficerCreateNestedOneWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutDistrictInput = {
+    id?: number
+    name: string
+    email: string
+    password: string
+    role: $Enums.Role
+    phone?: string | null
+    isActive?: boolean
+    refreshToken?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    officer?: OfficerUncheckedCreateNestedOneWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutDistrictInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutDistrictInput, UserUncheckedCreateWithoutDistrictInput>
+  }
+
+  export type UserCreateManyDistrictInputEnvelope = {
+    data: UserCreateManyDistrictInput | UserCreateManyDistrictInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OfficerUpsertWithWhereUniqueWithoutDistrictInput = {
     where: OfficerWhereUniqueInput
     update: XOR<OfficerUpdateWithoutDistrictInput, OfficerUncheckedUpdateWithoutDistrictInput>
@@ -11957,13 +12468,50 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Officer"> | Date | string
   }
 
+  export type UserUpsertWithWhereUniqueWithoutDistrictInput = {
+    where: UserWhereUniqueInput
+    update: XOR<UserUpdateWithoutDistrictInput, UserUncheckedUpdateWithoutDistrictInput>
+    create: XOR<UserCreateWithoutDistrictInput, UserUncheckedCreateWithoutDistrictInput>
+  }
+
+  export type UserUpdateWithWhereUniqueWithoutDistrictInput = {
+    where: UserWhereUniqueInput
+    data: XOR<UserUpdateWithoutDistrictInput, UserUncheckedUpdateWithoutDistrictInput>
+  }
+
+  export type UserUpdateManyWithWhereWithoutDistrictInput = {
+    where: UserScalarWhereInput
+    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyWithoutDistrictInput>
+  }
+
+  export type UserScalarWhereInput = {
+    AND?: UserScalarWhereInput | UserScalarWhereInput[]
+    OR?: UserScalarWhereInput[]
+    NOT?: UserScalarWhereInput | UserScalarWhereInput[]
+    id?: IntFilter<"User"> | number
+    name?: StringFilter<"User"> | string
+    email?: StringFilter<"User"> | string
+    password?: StringFilter<"User"> | string
+    role?: EnumRoleFilter<"User"> | $Enums.Role
+    phone?: StringNullableFilter<"User"> | string | null
+    districtId?: IntNullableFilter<"User"> | number | null
+    isActive?: BoolFilter<"User"> | boolean
+    refreshToken?: StringNullableFilter<"User"> | string | null
+    createdAt?: DateTimeFilter<"User"> | Date | string
+    updatedAt?: DateTimeFilter<"User"> | Date | string
+  }
+
   export type UserCreateWithoutOfficerInput = {
     name: string
     email: string
     password: string
     role: $Enums.Role
+    phone?: string | null
+    isActive?: boolean
+    refreshToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    district?: DistrictCreateNestedOneWithoutUsersInput
   }
 
   export type UserUncheckedCreateWithoutOfficerInput = {
@@ -11972,6 +12520,10 @@ export namespace Prisma {
     email: string
     password: string
     role: $Enums.Role
+    phone?: string | null
+    districtId?: number | null
+    isActive?: boolean
+    refreshToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -11983,11 +12535,13 @@ export namespace Prisma {
 
   export type DistrictCreateWithoutOfficersInput = {
     name: string
+    users?: UserCreateNestedManyWithoutDistrictInput
   }
 
   export type DistrictUncheckedCreateWithoutOfficersInput = {
     id?: number
     name: string
+    users?: UserUncheckedCreateNestedManyWithoutDistrictInput
   }
 
   export type DistrictCreateOrConnectWithoutOfficersInput = {
@@ -12054,8 +12608,12 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    district?: DistrictUpdateOneWithoutUsersNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOfficerInput = {
@@ -12064,6 +12622,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    districtId?: NullableIntFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12081,11 +12643,13 @@ export namespace Prisma {
 
   export type DistrictUpdateWithoutOfficersInput = {
     name?: StringFieldUpdateOperationsInput | string
+    users?: UserUpdateManyWithoutDistrictNestedInput
   }
 
   export type DistrictUncheckedUpdateWithoutOfficersInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    users?: UserUncheckedUpdateManyWithoutDistrictNestedInput
   }
 
   export type FineUpsertWithWhereUniqueWithoutOfficerInput = {
@@ -12187,6 +12751,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     amount: number
+    isActive?: boolean
   }
 
   export type FineCategoryUncheckedCreateWithoutFinesInput = {
@@ -12194,6 +12759,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     amount: number
+    isActive?: boolean
   }
 
   export type FineCategoryCreateOrConnectWithoutFinesInput = {
@@ -12228,6 +12794,7 @@ export namespace Prisma {
     payerName: string
     payerPhone: string
     paymentMethod?: string
+    status?: string
     transactionId?: string | null
     receiptNo: string
     paidAt?: Date | string
@@ -12240,6 +12807,7 @@ export namespace Prisma {
     payerName: string
     payerPhone: string
     paymentMethod?: string
+    status?: string
     transactionId?: string | null
     receiptNo: string
     paidAt?: Date | string
@@ -12266,6 +12834,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     amount?: FloatFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type FineCategoryUncheckedUpdateWithoutFinesInput = {
@@ -12273,6 +12842,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     amount?: FloatFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type OfficerUpsertWithoutFinesInput = {
@@ -12319,6 +12889,7 @@ export namespace Prisma {
     payerName?: StringFieldUpdateOperationsInput | string
     payerPhone?: StringFieldUpdateOperationsInput | string
     paymentMethod?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     receiptNo?: StringFieldUpdateOperationsInput | string
     paidAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12331,6 +12902,7 @@ export namespace Prisma {
     payerName?: StringFieldUpdateOperationsInput | string
     payerPhone?: StringFieldUpdateOperationsInput | string
     paymentMethod?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     receiptNo?: StringFieldUpdateOperationsInput | string
     paidAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12376,7 +12948,7 @@ export namespace Prisma {
   }
 
   export type SMSLogCreateWithoutPaymentInput = {
-    phone: string
+    officerPhone: string
     message: string
     status: string
     sid?: string | null
@@ -12385,7 +12957,7 @@ export namespace Prisma {
 
   export type SMSLogUncheckedCreateWithoutPaymentInput = {
     id?: number
-    phone: string
+    officerPhone: string
     message: string
     status: string
     sid?: string | null
@@ -12468,7 +13040,7 @@ export namespace Prisma {
     NOT?: SMSLogScalarWhereInput | SMSLogScalarWhereInput[]
     id?: IntFilter<"SMSLog"> | number
     paymentId?: IntFilter<"SMSLog"> | number
-    phone?: StringFilter<"SMSLog"> | string
+    officerPhone?: StringFilter<"SMSLog"> | string
     message?: StringFilter<"SMSLog"> | string
     status?: StringFilter<"SMSLog"> | string
     sid?: StringNullableFilter<"SMSLog"> | string | null
@@ -12480,6 +13052,7 @@ export namespace Prisma {
     payerName: string
     payerPhone: string
     paymentMethod?: string
+    status?: string
     transactionId?: string | null
     receiptNo: string
     paidAt?: Date | string
@@ -12493,6 +13066,7 @@ export namespace Prisma {
     payerName: string
     payerPhone: string
     paymentMethod?: string
+    status?: string
     transactionId?: string | null
     receiptNo: string
     paidAt?: Date | string
@@ -12519,6 +13093,7 @@ export namespace Prisma {
     payerName?: StringFieldUpdateOperationsInput | string
     payerPhone?: StringFieldUpdateOperationsInput | string
     paymentMethod?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     receiptNo?: StringFieldUpdateOperationsInput | string
     paidAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12532,6 +13107,7 @@ export namespace Prisma {
     payerName?: StringFieldUpdateOperationsInput | string
     payerPhone?: StringFieldUpdateOperationsInput | string
     paymentMethod?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     receiptNo?: StringFieldUpdateOperationsInput | string
     paidAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12543,6 +13119,19 @@ export namespace Prisma {
     badgeNo: string
     phone: string
     createdAt?: Date | string
+  }
+
+  export type UserCreateManyDistrictInput = {
+    id?: number
+    name: string
+    email: string
+    password: string
+    role: $Enums.Role
+    phone?: string | null
+    isActive?: boolean
+    refreshToken?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type OfficerUpdateWithoutDistrictInput = {
@@ -12568,6 +13157,46 @@ export namespace Prisma {
     badgeNo?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUpdateWithoutDistrictInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    officer?: OfficerUpdateOneWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutDistrictInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    officer?: OfficerUncheckedUpdateOneWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateManyWithoutDistrictInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type FineCreateManyOfficerInput = {
@@ -12702,7 +13331,7 @@ export namespace Prisma {
 
   export type SMSLogCreateManyPaymentInput = {
     id?: number
-    phone: string
+    officerPhone: string
     message: string
     status: string
     sid?: string | null
@@ -12710,7 +13339,7 @@ export namespace Prisma {
   }
 
   export type SMSLogUpdateWithoutPaymentInput = {
-    phone?: StringFieldUpdateOperationsInput | string
+    officerPhone?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     sid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12719,7 +13348,7 @@ export namespace Prisma {
 
   export type SMSLogUncheckedUpdateWithoutPaymentInput = {
     id?: IntFieldUpdateOperationsInput | number
-    phone?: StringFieldUpdateOperationsInput | string
+    officerPhone?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     sid?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12728,7 +13357,7 @@ export namespace Prisma {
 
   export type SMSLogUncheckedUpdateManyWithoutPaymentInput = {
     id?: IntFieldUpdateOperationsInput | number
-    phone?: StringFieldUpdateOperationsInput | string
+    officerPhone?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     sid?: NullableStringFieldUpdateOperationsInput | string | null

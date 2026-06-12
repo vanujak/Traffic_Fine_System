@@ -126,6 +126,10 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   password: 'password',
   role: 'role',
+  phone: 'phone',
+  districtId: 'districtId',
+  isActive: 'isActive',
+  refreshToken: 'refreshToken',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -148,7 +152,8 @@ exports.Prisma.FineCategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
-  amount: 'amount'
+  amount: 'amount',
+  isActive: 'isActive'
 };
 
 exports.Prisma.FineScalarFieldEnum = {
@@ -175,6 +180,7 @@ exports.Prisma.PaymentScalarFieldEnum = {
   payerName: 'payerName',
   payerPhone: 'payerPhone',
   paymentMethod: 'paymentMethod',
+  status: 'status',
   transactionId: 'transactionId',
   receiptNo: 'receiptNo',
   paidAt: 'paidAt'
@@ -183,7 +189,7 @@ exports.Prisma.PaymentScalarFieldEnum = {
 exports.Prisma.SMSLogScalarFieldEnum = {
   id: 'id',
   paymentId: 'paymentId',
-  phone: 'phone',
+  officerPhone: 'officerPhone',
   message: 'message',
   status: 'status',
   sid: 'sid',
@@ -205,6 +211,7 @@ exports.Prisma.NullsOrder = {
   last: 'last'
 };
 exports.Role = exports.$Enums.Role = {
+  USER: 'USER',
   OFFICER: 'OFFICER',
   ADMIN: 'ADMIN'
 };
