@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { getDistricts, getUsers, registerOfficer } from "../api/client.js";
 
 export default function Officers() {
   const [officers, setOfficers] = useState([]);
@@ -8,7 +9,6 @@ export default function Officers() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // Form Fields
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,36 +16,24 @@ export default function Officers() {
   const [badgeNo, setBadgeNo] = useState("");
   const [districtId, setDistrictId] = useState("");
 
-  const token = localStorage.getItem("adminToken");
-
   const fetchData = async () => {
     setLoading(true);
     setError("");
-    try {
-      // Fetch Districts
-      const distRes = await fetch("http://localhost:5000/api/v1/districts");
-      const distData = await distRes.json();
-      if (distRes.ok && distData.success) {
-        setDistricts(distData.data || []);
-      }
 
-      // Fetch Users (which we will filter for role === "OFFICER")
-      const usersRes = await fetch("http://localhost:5000/api/v1/users", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const usersData = await usersRes.json();
-      if (usersRes.ok && usersData.success) {
-        const officerList = (usersData.data || []).filter(
-          (u) => u.role === "OFFICER"
-        );
-        setOfficers(officerList);
-      } else {
-        setError(usersData.message || "Failed to fetch officers list.");
-      }
-    } catch (err) {
-      setError("Failed to fetch data from the server.");
+    try {
+      const [districtResponse, usersResponse] = await Promise.all([
+        getDistricts(),
+        getUsers({ limit: 100 }),
+      ]);
+
+      setDistricts(districtResponse?.data || []);
+
+      const officerList = (usersResponse?.data || []).filter(
+        (user) => user.role === "OFFICER",
+      );
+      setOfficers(officerList);
+    } catch (fetchError) {
+      setError(fetchError.message || "Failed to fetch data from the server.");
     } finally {
       setLoading(false);
     }
@@ -55,8 +43,8 @@ export default function Officers() {
     fetchData();
   }, []);
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
+  const handleRegister = async (event) => {
+    event.preventDefault();
     setError("");
     setSuccess("");
 
@@ -66,58 +54,54 @@ export default function Officers() {
     }
 
     setSubmitting(true);
+
     try {
-      const response = await fetch("http://localhost:5000/api/v1/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          name,
-          email,
-          password,
-          role: "OFFICER",
-          phone,
-          badgeNo,
-          districtId: Number(districtId),
-        }),
+      await registerOfficer({
+        name,
+        email,
+        password,
+        role: "OFFICER",
+        phone,
+        badgeNo,
+        districtId: Number(districtId),
       });
 
-      const resData = await response.json();
-
-      if (response.ok && resData.success) {
-        setSuccess(`Officer ${name} registered successfully!`);
-        // Reset Form
-        setName("");
-        setEmail("");
-        setPassword("");
-        setPhone("");
-        setBadgeNo("");
-        setDistrictId("");
-        // Reload List
-        fetchData();
-      } else {
-        setError(resData.message || "Registration failed.");
-      }
-    } catch (err) {
-      setError("Server connection failed. Could not register officer.");
+      setSuccess(`Officer ${name} registered successfully!`);
+      setName("");
+      setEmail("");
+      setPassword("");
+      setPhone("");
+      setBadgeNo("");
+      setDistrictId("");
+      fetchData();
+    } catch (registerError) {
+      setError(
+        registerError.message || "Server connection failed. Could not register officer.",
+      );
     } finally {
       setSubmitting(false);
     }
   };
 
+  const officerCountLabel = useMemo(
+    () => `${officers.length} officer${officers.length === 1 ? "" : "s"}`,
+    [officers.length],
+  );
+
   return (
     <div>
       <div className="page-header">
-        <h2>Police Officers Management</h2>
+        <div>
+          <h2>Police Officers Management</h2>
+          <p className="topbar-subtitle">Create and review admin-managed officer accounts</p>
+        </div>
+        <span className="badge">{officerCountLabel}</span>
       </div>
 
-      {error && <div className="error-message">{error}</div>}
-      {success && <div className="success-message">{success}</div>}
+      {error ? <div className="alert alert-error">{error}</div> : null}
+      {success ? <div className="success-message">{success}</div> : null}
 
       <div className="officers-layout">
-        {/* Officers Directory */}
         <section className="card">
           <h3>Officers Directory</h3>
           {loading ? (
@@ -160,7 +144,6 @@ export default function Officers() {
           )}
         </section>
 
-        {/* Register Form */}
         <section className="card">
           <h3>Register New Officer</h3>
           <form onSubmit={handleRegister} style={{ marginTop: "16px" }}>
@@ -174,7 +157,7 @@ export default function Officers() {
                 className="form-input-light"
                 placeholder="e.g. Inspector K. Perera"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(event) => setName(event.target.value)}
                 required
                 disabled={submitting}
               />
@@ -190,7 +173,7 @@ export default function Officers() {
                 className="form-input-light"
                 placeholder="e.g. perera@trafficfines.lk"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(event) => setEmail(event.target.value)}
                 required
                 disabled={submitting}
               />
@@ -206,7 +189,7 @@ export default function Officers() {
                 className="form-input-light"
                 placeholder="Min 6 characters"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(event) => setPassword(event.target.value)}
                 required
                 minLength={6}
                 disabled={submitting}
@@ -223,7 +206,7 @@ export default function Officers() {
                 className="form-input-light"
                 placeholder="e.g. +94771234567"
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                onChange={(event) => setPhone(event.target.value)}
                 required
                 disabled={submitting}
               />
@@ -239,7 +222,7 @@ export default function Officers() {
                 className="form-input-light"
                 placeholder="e.g. SLP8942"
                 value={badgeNo}
-                onChange={(e) => setBadgeNo(e.target.value)}
+                onChange={(event) => setBadgeNo(event.target.value)}
                 required
                 disabled={submitting}
               />
@@ -253,14 +236,14 @@ export default function Officers() {
                 id="district"
                 className="form-select"
                 value={districtId}
-                onChange={(e) => setDistrictId(e.target.value)}
+                onChange={(event) => setDistrictId(event.target.value)}
                 required
                 disabled={submitting}
               >
                 <option value="">Select District</option>
-                {districts.map((d) => (
-                  <option key={d.id} value={d.id}>
-                    {d.name}
+                {districts.map((district) => (
+                  <option key={district.id} value={district.id}>
+                    {district.name}
                   </option>
                 ))}
               </select>
