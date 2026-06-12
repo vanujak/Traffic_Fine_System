@@ -5,6 +5,7 @@ const navItems = [
   { label: "Fines", path: "/fines" },
   { label: "Payments", path: "/payments" },
   { label: "Reports", path: "/reports" },
+  { label: "Police Officers", path: "/officers" },
 ];
 
 export default function Sidebar() {
